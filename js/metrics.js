@@ -4,7 +4,7 @@
 
 var metrics = '';
 var date = ['x'];
-var distance = ['Distance (m)'];
+var distance = ['Distance (km)'];
 var pace = ['Pace (m/s)'];
 
 
@@ -14,7 +14,7 @@ function update() {
   for (var i = 0; i < metrics.length; i++) {
     if (metrics[i].activity == 'Run') {
       date.push(metrics[i].date);
-      distance.push(metrics[i].distance);
+      distance.push((metrics[i].distance) / 1000);
       pace.push(metrics[i].pace);
     }
   }
