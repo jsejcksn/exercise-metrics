@@ -44,7 +44,7 @@ function update() {
       pace.push(metrics[i].pace);
     }
   }
-  console.log(date.length-1 + ' running, ' + metrics.length + ' total');
+  console.log((date.length - 1) + ' running, ' + metrics.length + ' total');
 }
 
 // This should become an option for file upload or copy/paste input
@@ -67,9 +67,9 @@ fetch('metrics/exercise-metrics.json')
   )
   .catch(function(err) {
     console.log('Fetch Error :-S', err);
-});
+  });
 
-setTimeout(update,500);
+setTimeout(update, 500);
 
 var chart = c3.generate({
   bindto: '#chart',
@@ -93,7 +93,7 @@ var chart = c3.generate({
   }
 });
 
-setTimeout(function () {
+setTimeout(function() {
   chart.load({
     columns: [
       date,
