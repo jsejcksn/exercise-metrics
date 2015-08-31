@@ -1,5 +1,7 @@
 // Exercise Metrics
 
+var exMetrics = (function() {
+
 console.log('Exercise Metrics');
 
 var metrics = '',
@@ -38,7 +40,7 @@ function tsvToJson(input) {
 
 function update() {
   for (var i = 0; i < metrics.length; i++) {
-    if (metrics[i].activity == 'Run') {
+    if (metrics[i].activity === 'Run') {
       date.push(metrics[i].date);
       distance.push((metrics[i].distance) / 1000);
       pace.push(metrics[i].pace);
@@ -104,3 +106,14 @@ setTimeout(function() {
 }, 750);
 
 //  IDvar.addEventListener('input', listenEncode); // Listens for change in plaintext
+
+console.log('metrics\n' + metrics + '\n\npace\n' + pace);
+
+return {
+  metrics: metrics, // Returning empty
+  date: date,
+  distance: distance,
+  pace: pace
+};
+
+})();
