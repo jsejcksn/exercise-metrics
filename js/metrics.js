@@ -1,14 +1,40 @@
 // Exercise Metrics
 
-// Variables ----------
+console.log('Exercise Metrics');
 
-var metrics = '';
-var date = ['x'];
-var distance = ['Distance (km)'];
-var pace = ['Pace (m/s)'];
+var metrics = '',
+  date = ['x'],
+  distance = ['Distance (km)'],
+  pace = ['Pace (m/s)'];
 
+function tsvToJson(input) {
+  var info = input.replace(/['"]/g, ''),
+    lines = info.split('\n'),
+    firstLine = lines.shift().split('\t'),
+    json = [];
 
-// Functions ----------
+  // Helper function to remove quotes and parse numeric values
+  function removeQuotes(string) {
+    string = string.replace(/(['"])/g, "\\$1");
+    if (!isNaN(string)) {
+      string = parseFloat(string);
+    }
+    return string;
+  }
+
+  $.each(lines, function(index, item) {
+    var lineItem = item.split('\t'),
+      jsonLineEntry = {};
+
+    $.each(lineItem, function(index, item) {
+      jsonLineEntry[firstLine[index]] = removeQuotes(item);
+    });
+    json.push(jsonLineEntry);
+
+  });
+
+  return json;
+}
 
 function update() {
   for (var i = 0; i < metrics.length; i++) {
@@ -18,18 +44,8 @@ function update() {
       pace.push(metrics[i].pace);
     }
   }
-  console.log(date.length + ' running, ' + metrics.length + ' total');
+  console.log(date.length-1 + ' running, ' + metrics.length + ' total');
 }
-
-
-// EventListeners ----------
-
-
-
-
-// Execute ----------
-
-console.log('Exercise Metrics');
 
 // This should become an option for file upload or copy/paste input
 // From https://developers.google.com/web/updates/2015/03/introduction-to-fetch?hl=en
@@ -51,7 +67,7 @@ fetch('metrics/exercise-metrics.json')
   )
   .catch(function(err) {
     console.log('Fetch Error :-S', err);
-  });
+});
 
 setTimeout(update,500);
 
@@ -86,3 +102,5 @@ setTimeout(function () {
     ]
   });
 }, 750);
+
+//  IDvar.addEventListener('input', listenEncode); // Listens for change in plaintext
