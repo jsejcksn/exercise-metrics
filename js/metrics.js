@@ -51,24 +51,27 @@ function update() {
 
 // This should become an option for file upload or copy/paste input
 // From https://developers.google.com/web/updates/2015/03/introduction-to-fetch?hl=en
-fetch('metrics/exercise-metrics.json')
-  .then(
-    function(response) {
-      if (response.status !== 200) {
-        console.log('Looks like there was a problem. Status Code: ' +
-          response.status);
-        return;
-      }
+function status(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return Promise.resolve(response);
+  } else {
+    return Promise.reject(new Error(response.statusText));
+  }
+}
 
-      // Examine the text in the response
-      response.json().then(function(data) {
-        console.log(data);
-        metrics = data;
-      });
-    }
-  )
-  .catch(function(err) {
-    console.log('Fetch Error :-S', err);
+function json(response) {
+  return response.json();
+}
+
+fetch('metrics/exercise-metrics.json')
+  .then(status)
+  .then(json)
+  .then(function(data) {
+    console.log('Request succeeded with JSON response', data);
+    metrics = data;
+  })
+  .catch(function(error) {
+    console.log('Request failed', error);
   });
 
 setTimeout(update, 500);
@@ -105,15 +108,6 @@ setTimeout(function() {
   });
 }, 750);
 
-//  IDvar.addEventListener('input', listenEncode); // Listens for change in plaintext
-
-console.log('metrics\n' + metrics + '\n\npace\n' + pace);
-
-return {
-  metrics: metrics, // Returning empty
-  date: date,
-  distance: distance,
-  pace: pace
-};
+//  IDvar.addEventListener('click', someFunc);
 
 })();
