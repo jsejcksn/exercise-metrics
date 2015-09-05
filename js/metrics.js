@@ -46,6 +46,16 @@ function update() {
       pace.push(metrics[i].pace);
     }
   }
+  // Truncate arrays to contain only the 10 most recent records
+  var date2 = date.slice(-10),
+    distance2 = distance.slice(-10),
+    pace2 = pace.slice(-10);
+  date = date.slice(0, 1);
+  date = date.concat(date2);
+  distance = distance.slice(0, 1);
+  distance = distance.concat(distance2);
+  pace = pace.slice(0, 1);
+  pace = pace.concat(pace2);
   console.log((date.length - 1) + ' running, ' + metrics.length + ' total');
 }
 
