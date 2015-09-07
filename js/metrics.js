@@ -7,7 +7,19 @@ console.log('Exercise Metrics');
 var metrics = '',
   date = ['x'],
   distance = ['Distance (km)'],
-  pace = ['Pace (m/s)'];
+  limit = parseInt(document.getElementById('limit-entries').value),
+  pace = ['Pace (m/s)'],
+  sampleTSV = 'date\tactivity\tduration\tdistance\tpace\n2015-05-01\tRun\t1440\t4700\t3.264\n2015-05-07\tRun\t1425\t4700\t3.298\n2015-05-12\tRun\t1593\t5000\t3.139\n2015-05-18\tRun\t1417\t4700\t3.317\n2015-05-22\tRun\t1661\t5207\t3.135\n2015-05-27\tRun\t1440\t4700\t3.264\n2015-05-31\tRun\t1385\t4700\t3.394\n2015-06-04\tRun\t1407\t4718\t3.353\n2015-06-07\tRun\t1389\t4718\t3.397\n2015-06-28\tRun\t1012\t3316\t3.277\n2015-07-09\tRun\t998\t3316\t3.323\n2015-07-12\tRun\t1500\t3015\t2.01\n2015-07-14\tRun\t1244\t4083\t3.282',
+  sampleJSON = tsvToJson(sampleTSV);
+  tsv = document.getElementById('data-input');
+
+// function fillTSV() {
+//   tsv.value = localStorage.exerciseDataTSV;
+// }
+
+// function storeTSV() {
+//   localStorage.setItem('exerciseDataTSV', tsv.value);
+// }
 
 function tsvToJson(input) {
   var info = input.replace(/['"]/g, ''),
@@ -38,7 +50,9 @@ function tsvToJson(input) {
   return json;
 }
 
-function update() {
+function update(data) {
+  console.log('Updating chart');
+  metrics = tsvToJson(data);
   for (var i = 0; i < metrics.length; i++) {
     if (metrics[i].activity === 'Run') {
       date.push(metrics[i].date);
@@ -47,56 +61,33 @@ function update() {
     }
   }
   // Truncate arrays to contain only the 10 most recent records
-  var date2 = date.slice(-10),
-    distance2 = distance.slice(-10),
-    pace2 = pace.slice(-10);
+  limit = parseInt(document.getElementById('limit-entries').value);
+  var date2 = date.slice(-limit),
+    distance2 = distance.slice(-limit),
+    pace2 = pace.slice(-limit);
   date = date.slice(0, 1);
   date = date.concat(date2);
   distance = distance.slice(0, 1);
   distance = distance.concat(distance2);
   pace = pace.slice(0, 1);
   pace = pace.concat(pace2);
+
   console.log((date.length - 1) + ' running, ' + metrics.length + ' total');
-}
 
-// This should become an option for file upload or copy/paste input
-// From https://developers.google.com/web/updates/2015/03/introduction-to-fetch?hl=en
-function status(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return Promise.resolve(response);
-  } else {
-    return Promise.reject(new Error(response.statusText));
-  }
-}
-
-function json(response) {
-  return response.json();
-}
-
-fetch('metrics/exercise-metrics.json')
-  .then(status)
-  .then(json)
-  .then(function(data) {
-    console.log('Request succeeded with JSON response', data);
-    metrics = data;
-  })
-  .catch(function(error) {
-    console.log('Request failed', error);
+  chart.load({
+    columns: [
+      date,
+      pace,
+      distance
+    ]
   });
-
-setTimeout(update, 500);
+}
 
 var chart = c3.generate({
   bindto: '#chart',
   data: {
     x: 'x',
-//  xFormat: '%Y%m%d', // 'xFormat' can be used as custom format of 'x'
-    columns: [
-//    ['x', '2013-01-01', '2013-01-02', '2013-01-03', '2013-01-04', '2013-01-05', '2013-01-06'],
-//    ['x', '20130101', '20130102', '20130103', '20130104', '20130105', '20130106'],
-//    ['data1', 30, 200, 100, 400, 150, 250],
-//    ['data2', 130, 340, 200, 500, 250, 350],
-    ]
+    columns: []
   },
   axis: {
     x: {
@@ -108,16 +99,19 @@ var chart = c3.generate({
   }
 });
 
-setTimeout(function() {
-  chart.load({
-    columns: [
-      date,
-      pace,
-      distance
-    ]
-  });
-}, 750);
+// tsv.addEventListener('change', storeTSV);
+// if (!((localStorage.getItem('exerciseDataTSV') === null) && (localStorage.exerciseDataTSV === '') && (localStorage.exerciseDataTSV === undefined))) { // localStorage key exists and is not empty
+//   fillTSV();
+// }
 
-//  IDvar.addEventListener('click', someFunc);
+btn.addEventListener('click', function() {
+  update(tsv.value);
+});
+
+tsv.value = sampleTSV;
+
+setTimeout(function() {
+  update(tsv.value);
+}, 500);
 
 })();

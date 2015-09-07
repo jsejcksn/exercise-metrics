@@ -1,9 +1,10 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="description" content="Statistical workout metrics">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   <title>Exercise Metrics</title>
 
@@ -13,14 +14,26 @@
 </head>
 
 <body>
-  <main>
+  <section>
     <h1>Exercise Metrics</h1>
-    <div id="chart"></div>
-  </main>
+  </section>
+
+  <section class="chart-area">
+    <div>
+      <div id="chart" class="chart"></div>
+    </div>
+  </section>
+
+  <section class="controls">
+    <p class="instructions">Replace the example below by pasting exercise metrics as tab-separated values (TSV), then use the blue button to update the chart. The chart displays only the most recent <input id="limit-entries" class="limit-entries" type="number" value="7" /> entries.</p>
+    <button id="btn" class="btn-update">Update chart</button>
+    <textarea id="data-input" class="data-input" placeholder="Paste exercise data here"></textarea>
+  </section>
 
   <script src="js/jquery-2.1.4.min.js"></script>
   <script src="js/d3.min.js"></script>
   <script src="js/c3.min.js"></script>
   <script src="js/metrics.js"></script>
 </body>
+
 </html>
