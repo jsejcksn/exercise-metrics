@@ -1,6 +1,7 @@
 // Exercise Metrics
 
 var exMetrics = (function() {
+'use strict';
 
 console.log('Exercise Metrics');
 
