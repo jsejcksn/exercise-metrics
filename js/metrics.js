@@ -1,6 +1,6 @@
 // Exercise Metrics
 
-var exMetrics = (function() {
+(function() {
   'use strict';
 
   console.log('Exercise Metrics');
@@ -115,4 +115,4 @@ var exMetrics = (function() {
     update(tsv.value);
   }, 500);
 
-})();
+}());
