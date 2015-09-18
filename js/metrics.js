@@ -103,7 +103,8 @@
 
   tsv.value = sampleTSV;
   tsv.addEventListener('keyup', storeTSV);
-  if (!(localStorage.getItem('exerciseDataTSV') === null || undefined || '' || 0)) { // localStorage key exists and is not empty
+
+  if (localStorage.getItem('exerciseDataTSV') !== (null || '' || ' ')) { // Key exists and is not empty or a single space
     fillTSV();
   }
 
