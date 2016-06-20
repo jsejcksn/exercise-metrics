@@ -25,6 +25,7 @@ section {
   height: 50rem;
   margin: 1rem auto;
   padding: 1rem;
+  white-space: nowrap;
   width: 100%;
 }
 
